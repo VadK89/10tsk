@@ -20,31 +20,33 @@ namespace _10tsk
             //Ввод исходных данных
             Console.WriteLine("Введите исходные данные");
             Console.WriteLine("Введите численное значение градусов для задаваемого угла");
-            int gr = Convert.ToInt32(Console.ReadLine());
+            double gr = Convert.ToInt32(Console.ReadLine());            
             Console.WriteLine("Введите численное значение минут для задаваемого угла");
-            int mi = Convert.ToInt32(Console.ReadLine());
+            double mi = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine("Введите численное значение секунд для задаваемого угла");
-            int se = Convert.ToInt32(Console.ReadLine());
-            Corner corn = new Corner(gr,mi,se);
-            Console.WriteLine(corn);
+            double se = Convert.ToInt32(Console.ReadLine());
+            //Новый экземпляр класса угол и вывод результата
+            Corner corn = new Corner(gr, mi, se);
             corn.ToRad();
             Console.ReadKey();
-
         }
     }
-    class Corner
+    
+    //Задаем класс
+   class Corner
     {
-        private int grad;
-        private int min;
-        private int sec;
-
-        public int Grad
+        //Задаем 
+        private double grad;
+        private double min;
+        private double sec;
+        //свойства класса
+        public double Grad
         {
             set
             {
                 if (value>=0||value<=0)
-                {
-                    grad = value;
+                {                    
+                    grad = value;                    
                 }
                 else
                 {
@@ -56,18 +58,20 @@ namespace _10tsk
                 return grad;
             }
         }
-        public int Min
+        public double Min
         {
             set
             {
-                if (value>=0||value<=0)
+                if (value>=0&&value<=60)
                 {
                     min = value;
-                    grad += value / 60;
+                   
                 }
                 else
                 {
-                    Console.WriteLine("Введено некорректное значение");
+                    min = value % 60;
+                    grad += value / 60;
+                    Console.WriteLine("Введено значениеминут больше 60. было прибавлено к градусу");
                 }
             }
             get
@@ -75,18 +79,24 @@ namespace _10tsk
                 return min;
             }
         }
-        public int Sec
+        public double Sec
         {
             set
             {
-                if (value>=0||value<=0)
+                if (value>=0&&value<=60)
                 {
-                    sec = value%60;
-                    grad += value / 3600;
+                    sec = value;                   
+                    
                 }
                 else
                 {
-                    Console.WriteLine("Введено некорректное значение");
+                    sec = value % 60;
+                    min += value / 60;
+                    Console.WriteLine("Введено значение секунд больше 60. Было прибавлено к минутам");
+                    Console.WriteLine("Суммарный градус {0,000000:000.000}", grad);
+
+                    
+
                 }
             }
             get
@@ -94,16 +104,19 @@ namespace _10tsk
                 return sec;
             }
         }
-        public Corner(int grad, int min, int sec)
+        //Конструктор класса
+        public Corner(double grad, double min, double sec)
            {
             Grad = grad;
             Min = min;
             Sec = sec;
            }
+        //Метод для перевода в радианы
         public void ToRad()
-        {            
-            double rad = Math.PI * grad / 180;
-            Console.WriteLine("Угол в радианах{0:0000}",rad);
+        {
+            double grd = grad + min / 60 + sec / 3600;
+            double rad = Math.PI * grd / 180;
+            Console.WriteLine("Угол в радианах  {0,00000:000.00}", rad);
         }
     }
 }
